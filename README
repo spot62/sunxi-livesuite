@@ -12,24 +12,43 @@ wiki at http://linux-sunxi.org/LiveSuit
 Installing the kernel module.
 -----------------------------
 
-First you need to install dkms on your system.
+First you need to install kernel development environment on your system.
 
 On a debian or ubuntu this is as simple as (as root):
 # apt-get install dkms
 
 You can then descend into the awusb/ directory and just run:
-> make
-
-Then copy it over to to your kernel modules:
-# cp awusb.ko /lib/modules/`uname -r`/kernel/
+# make
+# make install
+# depmod -a
 
 Load the module by running:
 # modprobe awusb
 
+Installing the kernel module by DKMS
+-----------------------------
+
+First you need to install dkms on your system.
+
+Copy module source to sources directory
+# mkdir -p /usr/src/awusb-0.5
+# cp -R awusb /usr/src/awusb-0.5
+
+Add module to DKMS 
+# dkms add -m awusb -v 0.5
+
+Build and install
+# dkms build -m awusb -v 0.5
+# dkms install -m awusb -v 0.5
+
+Remove if neaded
+# dkms remove -m awusb/0.5 --all
+
+
 Running LiveSuit.
 -----------------
 
-Just run the top level script:
+Just run the top level script (may be as superuser, depends on the rights to usb ):
 > ./LiveSuit.sh
 
 This will determine whether your system is x86 or x86-64 and will then
